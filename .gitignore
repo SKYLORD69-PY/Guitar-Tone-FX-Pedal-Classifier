@@ -1,0 +1,18 @@
+# Raw audio is large and third-party (EGFxSet, or your own recordings) --
+# rebuild it locally with organize_dataset.py rather than committing it.
+# The .gitkeep files that preserve the folder structure are NOT ignored.
+data/raw_audio/**/*.wav
+
+# The extracted feature CSV IS committed on purpose -- it's the tangible
+# Day 1 deliverable and what Day 2's train.py reads from.
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+*.egg-info/
+
+# OS / editor cruft
+.DS_Store
+.vscode/

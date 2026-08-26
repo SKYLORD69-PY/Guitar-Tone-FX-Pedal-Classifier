@@ -1,0 +1,7 @@
+# Day 1 dependencies -- Guitar Tone & FX Pedal Classifier
+# (grows day by day: scikit-learn/joblib land on Day 2, streamlit on Day 4)
+librosa==1.0.0
+soundfile==0.14.0
+numpy==2.4.4
+pandas==3.0.2
+tqdm==4.70.0
