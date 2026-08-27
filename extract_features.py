@@ -1,12 +1,10 @@
 """
 extract_features.py
 
-Day 1 -- Guitar Tone & FX Pedal Classifier
---------------------------------------------------------------------------
 Walks a directory of labeled guitar audio clips (one sub-folder per
 tone/effect class), extracts a set of hand-crafted audio features with
-Librosa, and writes a single tabular CSV that Day 2 will feed straight
-into scikit-learn (Random Forest / SVM).
+Librosa, and writes a single tabular CSV for scikit-learn (Random Forest /
+SVM).
 
 Expected folder layout
 -----------------------
