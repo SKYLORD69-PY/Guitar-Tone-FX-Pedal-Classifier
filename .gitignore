@@ -3,8 +3,16 @@
 # The .gitkeep files that preserve the folder structure are NOT ignored.
 data/raw_audio/**/*.wav
 
-# The extracted feature CSV IS committed on purpose -- it's the tangible
-# Day 1 deliverable and what Day 2's train.py reads from.
+# Generated feature datasets
+data/features/*.csv
+
+# Trained models and reports
+models/
+reports/
+
+# Dataset archives and temporary downloads
+*.zip
+dataset_download/
 
 # Python
 __pycache__/
@@ -16,3 +24,5 @@ venv/
 # OS / editor cruft
 .DS_Store
 .vscode/
+
+data/raw_egfxset/
