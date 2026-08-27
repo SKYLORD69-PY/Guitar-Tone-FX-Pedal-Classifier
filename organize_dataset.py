@@ -1,8 +1,6 @@
 """
 organize_dataset.py
 
-Day 1 (dataset setup) -- Guitar Tone & FX Pedal Classifier
---------------------------------------------------------------------------
 One-time helper that reorganizes a downloaded EGFxSet extraction into the
 data/raw_audio/<class>/*.wav layout that extract_features.py expects.
 
