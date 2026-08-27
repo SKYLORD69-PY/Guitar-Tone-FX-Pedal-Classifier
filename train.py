@@ -181,14 +181,18 @@ def main() -> None:
         train_and_evaluate(
             "random_forest",
             RandomForestClassifier(
-                n_estimators=200, class_weight="balanced", random_state=args.random_state
+                n_estimators=200,
+                max_depth=18,
+                min_samples_leaf=2,
+                class_weight="balanced",
+                random_state=args.random_state,
             ),
             X_train_scaled, y_train, X_test_scaled, y_test, class_names,
         ),
         train_and_evaluate(
             "svm",
             SVC(
-                kernel="rbf", C=10, gamma="scale", probability=True,
+                kernel="rbf", C=5, gamma="scale", probability=True,
                 class_weight="balanced", random_state=args.random_state,
             ),
             X_train_scaled, y_train, X_test_scaled, y_test, class_names,
