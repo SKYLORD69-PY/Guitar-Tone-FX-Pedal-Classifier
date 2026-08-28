@@ -1,105 +1,64 @@
 # Guitar Tone & FX Pedal Classifier
 
-A lightweight audio classification project that identifies guitar tones and effects from short audio clips using handcrafted audio features and classical machine learning.
+A classical ML pipeline (Librosa + scikit-learn — no PyTorch/TensorFlow) that classifies a guitar clip's tone or effect pedal from hand-crafted audio features: MFCCs, spectral centroid, zero-crossing rate, and RMS energy.
 
-This project is built around Librosa and scikit-learn, with a simple pipeline for organizing labeled recordings, extracting timbral features, and preparing data for classification.
+## Pipeline
 
-## What this project does
-
-The goal is to classify guitar audio into categories such as:
-
-- clean
-- distortion
-- chorus
-- delay
-- reverb
-- phaser
-- flanger
-
-Instead of training on raw waveforms, the pipeline extracts interpretable audio descriptors such as MFCCs, spectral centroid, zero-crossing rate, and RMS energy. These features are then saved as a tabular dataset ready for model training.
-
-## Repository overview
-
-- `organize_dataset.py` – reorganizes downloaded effect datasets into the class-based folder structure expected by the pipeline.
-- `extract_features.py` – loads labeled `.wav` files, extracts audio features, and writes a CSV dataset.
-- `data/raw_audio/` – source audio grouped by class label.
-- `data/features/` – generated feature dataset output.
-
-## Dataset structure
-
-Place your labeled audio data in this layout:
-
-```text
-data/
-├── raw_audio/
-│   ├── clean/
-│   ├── distortion/
-│   ├── chorus/
-│   ├── delay/
-│   ├── reverb/
-│   ├── phaser/
-│   └── flanger/
-└── features/
-```
-
-Each class folder contains `.wav` files for that tone or effect.
+1. **Dataset preparation** — [`organize_dataset.py`](organize_dataset.py) sorts a downloaded [EGFxSet](https://egfxset.github.io/) extraction into `data/raw_audio/<class>/*.wav`.
+2. **Feature extraction** — [`extract_features.py`](extract_features.py) computes MFCCs, spectral centroid, zero-crossing rate, and RMS energy (mean + std) per clip into a single feature CSV.
+3. **Model training** — [`train.py`](train.py) trains and compares a Random Forest and an SVM on the same stratified split, evaluates both (confusion matrix, precision/recall/F1), and saves the stronger model.
+4. **Inference** — [`predict.py`](predict.py) loads the saved model and classifies a single new clip, via a reusable `TonePredictor` class.
+5. **Web app** — [`app.py`](app.py) is a Streamlit interface for uploading a clip, viewing its waveform, and seeing a live classification.
 
 ## Setup
 
-1. Clone the repository.
-2. Install dependencies:
+Navigate to the project root directory:
 
 ```bash
+cd "e:\Projects - ML\Guitar Tone Classifier"
 pip install -r requirements.txt
 ```
 
-3. Prepare the dataset.
-
-If you are using the EGFxSet dataset, run:
+Then run the pipeline:
 
 ```bash
-python organize_dataset.py --source path/to/unzipped/EGFxSet --dest data/raw_audio
+# 1. Get labeled training audio
+# Replace <YOUR_EGFXSET_PATH> with the actual path to your extracted EGFxSet folder
+python organize_dataset.py --source "<YOUR_EGFXSET_PATH>" --dest "data\raw_audio"
+
+# Example:
+# python organize_dataset.py --source "D:\Downloads\EGFxSet-master" --dest "data\raw_audio"
+
+# 2. Extract features
+python extract_features.py --data-dir "data\raw_audio" --output "data\features\guitar_tone_features.csv"
+
+# 3. Train + evaluate
+python train.py --features-csv "data\features\guitar_tone_features.csv"
+
+# 4. Classify a clip from the command line
+# Replace <YOUR_WAV_FILE> with the actual path to your audio file
+python predict.py --input "<YOUR_WAV_FILE>"
+
+# Example:
+# python predict.py --input "D:\audio_samples\my_guitar_clip.wav"
+
+# 5. Or launch the web app
+streamlit run app.py
 ```
 
-If you already have your own labeled recordings, place them in `data/raw_audio/<class_name>/` manually.
+## Project structure
 
-## Feature extraction
-
-Run:
-
-```bash
-python extract_features.py --data-dir data/raw_audio --output data/features/guitar_tone_features.csv
 ```
-
-This script extracts per-clip summary statistics for:
-
-- MFCC coefficients
-- spectral centroid
-- zero-crossing rate
-- RMS energy
-
-The result is a CSV with one row per audio clip and one column per extracted feature, along with the filename and label.
-
-## Why this approach
-
-This is a classic machine-learning workflow for audio classification:
-
-- feature engineering instead of end-to-end deep learning
-- interpretable signal descriptors
-- fast experimentation with tabular models
-- easy extension for additional classes or features
-
-## Requirements
-
-The project depends on:
-
-- Python 3
-- librosa
-- numpy
-- pandas
-- scikit-learn
-- tqdm
-
-## Notes
-
-This repository focuses on the data preparation and feature extraction stages. The project is designed to be a clean foundation for building a classifier on top of the generated feature table.
+.
+├── data/
+│   ├── raw_audio/<class>/   # training clips, one folder per tone/effect label
+│   └── features/            # extract_features.py output
+├── models/                  # train.py output: best model, scaler, label encoder
+├── reports/                 # train.py output: confusion matrices
+├── organize_dataset.py
+├── extract_features.py
+├── train.py
+├── predict.py
+├── app.py
+└── requirements.txt
+```

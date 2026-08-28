@@ -1,9 +1,13 @@
-
+# Guitar Tone & FX Pedal Classifier -- dependencies
+# Audio loading & feature extraction
 librosa==1.0.0
 soundfile==0.14.0
 numpy==2.4.4
 pandas==3.0.2
 tqdm==4.70.0
+# Model training & evaluation
 scikit-learn==1.8.0
 joblib==1.5.3
 matplotlib==3.10.8
+# Web app
+streamlit==1.62.0
