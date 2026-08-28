@@ -7,8 +7,9 @@ data/raw_audio/**/*.wav
 data/features/*.csv
 
 # Trained models and reports
-
 models/*.joblib
+models/*.json
+reports/*.png
 
 # Dataset archives and temporary downloads
 *.zip
