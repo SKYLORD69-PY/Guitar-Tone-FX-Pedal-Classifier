@@ -3,8 +3,8 @@ predict.py
 
 Guitar Tone & FX Pedal Classifier
 --------------------------------------------------------------------------
-Loads the model/scaler/label-encoder saved by train.py and
-predicts the tone/effect class of a single new .wav clip.
+Loads the model/scaler/label-encoder saved by train.py and predicts the
+ tone/effect class of a single new .wav clip.
 
 Usage
 -----
@@ -22,10 +22,10 @@ from pathlib import Path
 import joblib
 import numpy as np
 
-# Reuse the exact feature-extraction logic -- never reimplement it
-# here. Two copies of "how to turn a clip into numbers" will eventually
-# drift apart, and a silent mismatch here wouldn't crash, it would just
-# quietly produce wrong predictions.
+# Reuse the exact feature-extraction logic -- never reimplement it here.
+# Two copies of "how to turn a clip into numbers" will eventually drift
+# apart, and a silent mismatch here wouldn't crash, it would just quietly
+# produce wrong predictions.
 from extract_features import DEFAULT_SAMPLE_RATE, FeatureConfig, extract_features
 
 logging.basicConfig(level=logging.INFO, format="%(levelname)s: %(message)s")
@@ -62,6 +62,7 @@ class TonePredictor:
         # extract_features() happens to build its dict in.
         self.feature_names: list[str] = metadata["feature_names"]
         self.model_name: str = metadata["best_model"]
+        self.metadata: dict = metadata  # full record (incl. all_candidates) for callers like app.py
 
         # n_mfcc is fully recoverable from the saved column names (count the
         # mfcc_N_mean entries); sample_rate isn't -- it only changes the
